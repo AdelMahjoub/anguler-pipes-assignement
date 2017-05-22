@@ -1,0 +1,101 @@
+<div class="container">
+  <!-- HEADER-->
+  <div class="row">
+    <div class="col-xs-10">
+      <div class="page-header">
+        <h1>Pipes Assignement</h1>
+        <p>Appstatus: <span>{{ appStatus | async}}</span></p>
+      </div>
+    </div>
+  </div>
+
+  <div class="row"><!--ROW-->
+
+    <div class="col-xs-12 col-sm-10 col-md-8 col-sm-offset-1 col-md-offset-2"><!-- COL -->
+      
+      <div class="row form-group">
+        <label class="col-xs-2">Filter</label>
+        <div class="col-xs-10">
+          <!-- FILTER KEY -->
+          <select 
+            class="form-control" 
+            (change)="onFilterChange($event)">
+            <option 
+              *ngFor="let key of filters" 
+              [value]="key">{{ key | titlecase }}</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- HORIZONTAL LINE -->
+      <div class="row">
+        <div class="col-xs-12">
+          <hr>
+        </div>
+      </div>
+
+      <div class="row form-group">
+        <label class="col-xs-2">Search For</label>
+        <div class="col-xs-10">
+          <!-- FILTER VALUE -->
+          <input 
+            type="text" 
+            [(ngModel)]="searchedValue" 
+            class="form-control">
+        </div>
+      </div>
+
+      <!-- REVERSE / SORT -->
+      <div class="row">
+        <div class="col-xs-10">
+          <div class="form-group">
+            <!-- REVERSE CHECKBOX -->
+            <div class="checkbox">
+              <label>
+                <input 
+                  type="checkbox" 
+                  [checked]="reverse"
+                  (click)="onReverse()">
+                Reverse
+              </label>
+            </div>
+            <!-- SORT CHECKBOX -->
+            <div class="checkbox">
+              <label>
+                <input type="checkbox" 
+                  [checked]="sort"
+                  (click)="onSort()">
+                Sort
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- HORIZONTAL LINE -->
+      <div class="row">
+        <div class="col-xs-12">
+          <hr>
+        </div>
+      </div>
+
+      <ul class="list-group">
+        <li
+          class="list-group-item"
+          *ngFor="let server of servers | filter:searchFilter:searchedValue | sort: sort: 'name'"
+          [ngClass]="getStatusClasses(server)">
+          <span
+            class="badge">
+            {{ server.status | reverse: reverse }}
+          </span>
+          <strong>
+            {{ server.name | shorten:10 | reverse: reverse }}
+          </strong> | {{ server.instanceType | uppercase }} | {{ server.started | date:'fullDate' | uppercase | reverse: reverse }}
+        </li>
+      </ul>
+
+    </div><!-- END OF COL-->
+
+  </div><!-- END OF ROW -->
+
+</div><!--END OF CONTAINER-->
